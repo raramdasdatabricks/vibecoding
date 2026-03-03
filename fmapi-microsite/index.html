@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Databricks Foundation Model APIs — One API. Every AI Model. Zero Lock-In.</title>
+  <meta name="description" content="Stop negotiating separate AI vendor contracts. Access Claude, Llama, Mistral, and DBRX through one Databricks API — with pay-per-token pricing, enterprise security, and your data never leaving your platform." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ── Navigation ── -->
+  <nav class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="#" class="nav__logo">
+        <!-- Official Databricks spark mark, extracted from databricks.com -->
+        <svg width="22" height="22" viewBox="0 0 20 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="m18.318 9.275-8.631 4.859L.445 8.942 0 9.182v3.77l9.687 5.431 8.63-4.84v1.995l-8.63 4.86-9.242-5.192-.445.24v.646l9.687 5.432 9.668-5.432v-3.769l-.445-.24-9.223 5.173-8.65-4.84V10.42l8.65 4.84 9.668-5.43V6.114l-.482-.277-9.186 5.155L1.482 6.41l8.205-4.6 6.741 3.787.593-.332v-.462L9.687.684 0 6.115v.592l9.687 5.432 8.63-4.86z" fill="#EE3D2C"/>
+        </svg>
+        <span>Databricks</span>
+      </a>
+      <ul class="nav__links">
+        <li><a href="#features">Why FMAPI</a></li>
+        <li><a href="#solutions">Use Cases</a></li>
+        <li><a href="#about">How It Works</a></li>
+        <li><a href="#contact">Get Access</a></li>
+      </ul>
+      <a href="#contact" class="btn btn--primary btn--sm">Book a Demo</a>
+      <button class="nav__hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section class="hero" id="hero">
+    <div class="hero__bg-grid" aria-hidden="true"></div>
+    <div class="hero__glow" aria-hidden="true"></div>
+    <div class="container">
+      <div class="hero__badge">
+        <span class="badge-dot"></span>
+        Foundation Model APIs — Now Generally Available
+      </div>
+      <h1 class="hero__headline">
+        One API. Every AI Model.<br />
+        <span class="text-gradient">Zero Vendor Lock-In.</span>
+      </h1>
+      <p class="hero__sub">
+        Stop juggling separate contracts with OpenAI, Anthropic, and Meta. Databricks Foundation Model APIs give you pay-per-token access to Claude, Llama, DBRX, and more — through a single enterprise agreement, on the platform your data already lives on.
+      </p>
+      <div class="hero__cta">
+        <a href="#contact" class="btn btn--primary btn--lg">
+          See FMAPI in Action
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#features" class="btn btn--ghost btn--lg">Why Teams Switch to FMAPI</a>
+      </div>
+
+      <!-- Social proof -->
+      <div class="hero__social-proof">
+        <div class="proof-card reveal">
+          <p class="proof-quote">"We cut our AI vendor spend by 54% and shipped three AI features in the time it used to take us to ship one. FMAPI changed our economics entirely."</p>
+          <div class="proof-author">
+            <div class="proof-avatar" style="background: linear-gradient(135deg, #FF3621, #ff6b5b);">M</div>
+            <div>
+              <div class="proof-name">CTO, Global Retail Enterprise</div>
+              <div class="proof-outcome">↓ 54% AI spend · ↑ 3× feature velocity</div>
+            </div>
+          </div>
+        </div>
+        <div class="proof-card reveal">
+          <p class="proof-quote">"Our legal team blocked every other AI vendor. With FMAPI, data stays on our Databricks lakehouse and we have a full audit trail. First AI approval in 18 months."</p>
+          <div class="proof-author">
+            <div class="proof-avatar" style="background: linear-gradient(135deg, #1e4ed8, #3b82f6);">R</div>
+            <div>
+              <div class="proof-name">Chief Data Officer, Financial Services</div>
+              <div class="proof-outcome">First AI initiative approved in 18 months</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__stats">
+        <div class="stat">
+          <span class="stat__num">10+</span>
+          <span class="stat__label">World-Class Models</span>
+        </div>
+        <div class="stat__divider"></div>
+        <div class="stat">
+          <span class="stat__num">1 Contract</span>
+          <span class="stat__label">All Models, All Access</span>
+        </div>
+        <div class="stat__divider"></div>
+        <div class="stat">
+          <span class="stat__num">$0</span>
+          <span class="stat__label">Reserved Capacity Fees</span>
+        </div>
+        <div class="stat__divider"></div>
+        <div class="stat">
+          <span class="stat__num">SOC 2</span>
+          <span class="stat__label">Type II Certified</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Features ── -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">Why Teams Switch to Foundation Model APIs</p>
+        <h2 class="section-title">Everything your AI strategy needs.<br />Nothing you don't.</h2>
+        <p class="section-sub">FMAPI is the fastest path from AI ambition to AI revenue — without the vendor sprawl, compliance nightmares, or runaway costs.</p>
+      </div>
+      <div class="features__grid">
+
+        <div class="feature-card feature-card--large reveal">
+          <div class="feature-card__icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <rect x="2" y="2" width="28" height="28" rx="6" fill="#FF3621" fill-opacity="0.15"/>
+              <path d="M8 10h16M8 16h10M8 22h12" stroke="#FF3621" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>One Contract. All the World's Best AI Models.</h3>
+          <p>Stop managing separate agreements with OpenAI, Anthropic, and Meta. FMAPI brings Claude, Llama 3, Mistral, DBRX, and more under your existing Databricks agreement — with one invoice, one support team, and one security review. Your procurement team will thank you.</p>
+          <div class="feature-card__pill">Eliminate vendor sprawl</div>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-card__icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <rect x="2" y="2" width="28" height="28" rx="6" fill="#FF3621" fill-opacity="0.15"/>
+              <path d="M16 8v8l5 3" stroke="#FF3621" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="16" cy="16" r="9" stroke="#FF3621" stroke-width="2"/>
+            </svg>
+          </div>
+          <h3>Pay Only for What You Use</h3>
+          <p>No reserved capacity. No minimum commits. No surprise overages. FMAPI's pay-per-token model means your AI costs flex with your business — up or down.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-card__icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <rect x="2" y="2" width="28" height="28" rx="6" fill="#FF3621" fill-opacity="0.15"/>
+              <rect x="8" y="12" width="16" height="12" rx="2" stroke="#FF3621" stroke-width="2"/>
+              <path d="M11 12V9a5 5 0 0 1 10 0v3" stroke="#FF3621" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Your Data Never Leaves Your Platform</h3>
+          <p>FMAPI runs inside your Databricks environment. Your proprietary data is never used to train models, never sent to third-party servers. SOC 2 Type II, HIPAA, and ISO 27001 compliance — built in, not bolted on.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-card__icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <rect x="2" y="2" width="28" height="28" rx="6" fill="#FF3621" fill-opacity="0.15"/>
+              <path d="M10 16l4 4 8-8" stroke="#FF3621" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Switch Models in Seconds, Not Sprints</h3>
+          <p>A better model launches next week? Switch to it without rewriting your integration. FMAPI's unified interface means model upgrades are a config change, not an engineering project.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-card__icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <rect x="2" y="2" width="28" height="28" rx="6" fill="#FF3621" fill-opacity="0.15"/>
+              <polyline points="6,22 12,14 18,18 26,10" stroke="#FF3621" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Full Audit Trail for Regulated Industries</h3>
+          <p>Every API call logged, every token tracked, every decision traceable. FMAPI gives compliance and legal teams the governance controls they need to say yes to AI.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-card__icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <rect x="2" y="2" width="28" height="28" rx="6" fill="#FF3621" fill-opacity="0.15"/>
+              <circle cx="16" cy="11" r="3" stroke="#FF3621" stroke-width="2"/>
+              <circle cx="8" cy="23" r="3" stroke="#FF3621" stroke-width="2"/>
+              <circle cx="24" cy="23" r="3" stroke="#FF3621" stroke-width="2"/>
+              <path d="M16 14v3M16 17l-6 3M16 17l6 3" stroke="#FF3621" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Already on Databricks? You're Already Set Up.</h3>
+          <p>If your data lives on Databricks, FMAPI is one click away. No new infrastructure, no new security reviews, no new procurement. Your existing platform becomes your AI platform.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Use Cases ── -->
+  <section class="models" id="solutions">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">What Teams Build with FMAPI</p>
+        <h2 class="section-title">From idea to production AI<br />in weeks, not quarters.</h2>
+        <p class="section-sub">FMAPI customers ship meaningful AI products fast — because they're not spending months on infrastructure or vendor negotiations.</p>
+      </div>
+      <div class="models__grid">
+        <div class="model-card reveal">
+          <div class="model-card__header">
+            <span class="model-badge model-badge--anthropic">Customer Teams</span>
+            <span class="model-badge model-badge--hot">Most Popular</span>
+          </div>
+          <h4>AI-Powered Customer Assistants</h4>
+          <p class="model-card__usecase">Resolve queries instantly. Escalate intelligently.</p>
+          <p>Handle thousands of simultaneous customer conversations with AI that knows your products, policies, and tone — without hiring a single additional agent.</p>
+          <div class="model-card__stats">
+            <span>↓ 40% support costs</span>
+            <span>·</span>
+            <span>24/7 coverage</span>
+          </div>
+        </div>
+        <div class="model-card reveal">
+          <div class="model-card__header">
+            <span class="model-badge model-badge--meta">Operations</span>
+          </div>
+          <h4>Intelligent Document Processing</h4>
+          <p class="model-card__usecase">Contracts, reports, and compliance docs — automated.</p>
+          <p>Extract, classify, and act on information from thousands of documents per day. Eliminate manual review bottlenecks and the errors that come with them.</p>
+          <div class="model-card__stats">
+            <span>↑ 10× throughput</span>
+            <span>·</span>
+            <span>↓ processing cost</span>
+          </div>
+        </div>
+        <div class="model-card reveal">
+          <div class="model-card__header">
+            <span class="model-badge model-badge--databricks">Internal Tools</span>
+            <span class="model-badge model-badge--new">High ROI</span>
+          </div>
+          <h4>Enterprise Knowledge Assistant</h4>
+          <p class="model-card__usecase">Ask your data anything. Get answers instantly.</p>
+          <p>Give every employee a smart assistant that can search internal docs, answer policy questions, and surface insights — without a data analyst in the loop.</p>
+          <div class="model-card__stats">
+            <span>↑ team productivity</span>
+            <span>·</span>
+            <span>↓ time to answer</span>
+          </div>
+        </div>
+        <div class="model-card reveal">
+          <div class="model-card__header">
+            <span class="model-badge model-badge--mistral">Analytics</span>
+          </div>
+          <h4>Natural Language Analytics</h4>
+          <p class="model-card__usecase">Your data, in plain language. For everyone.</p>
+          <p>Let business users query your data warehouse in plain English. No SQL. No waiting for a report. Decisions happen faster when everyone has access to insights.</p>
+          <div class="model-card__stats">
+            <span>↑ data accessibility</span>
+            <span>·</span>
+            <span>↓ analyst backlog</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How It Works ── -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about__inner">
+        <div class="about__content reveal">
+          <p class="section-eyebrow">How FMAPI Works</p>
+          <h2 class="section-title">Your data. The world's best AI.<br />One platform. Full control.</h2>
+          <p>FMAPI sits inside your Databricks environment — meaning your proprietary data, your customer records, your business context never has to leave your platform to power AI. You bring the data. We bring the models.</p>
+          <p>Unlike direct API contracts with model providers, FMAPI gives you a single unified endpoint, automatic model routing, built-in rate limiting and spend controls, and end-to-end observability — all governed by your existing Databricks security policies.</p>
+          <a href="#contact" class="btn btn--primary">See a Live Demo</a>
+        </div>
+        <div class="about__cards reveal">
+          <div class="team-card">
+            <div class="team-card__avatar" style="background: linear-gradient(135deg, #FF3621, #ff6b5b);">1</div>
+            <div>
+              <div class="team-card__name">Connect in Minutes</div>
+              <div class="team-card__role">One endpoint. Works with your existing OpenAI integration.</div>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card__avatar" style="background: linear-gradient(135deg, #1e4ed8, #3b82f6);">2</div>
+            <div>
+              <div class="team-card__name">Choose the Right Model</div>
+              <div class="team-card__role">Claude, Llama, DBRX, Mistral — pick per task, or let FMAPI route automatically.</div>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card__avatar" style="background: linear-gradient(135deg, #7c3aed, #a78bfa);">3</div>
+            <div>
+              <div class="team-card__name">Ship to Production</div>
+              <div class="team-card__role">Scale from prototype to millions of calls — no infrastructure changes.</div>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card__avatar" style="background: linear-gradient(135deg, #059669, #34d399);">4</div>
+            <div>
+              <div class="team-card__name">Monitor &amp; Optimize</div>
+              <div class="team-card__role">Built-in cost tracking, latency monitoring, and quality evaluation.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Contact ── -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="contact__inner">
+        <div class="contact__info reveal">
+          <p class="section-eyebrow">Get Started with FMAPI</p>
+          <h2 class="section-title">See Foundation Model APIs<br />live in your environment.</h2>
+          <p>Our team will walk you through a personalized FMAPI demo — using your data, your use cases, and your business context. No slides. Just working AI.</p>
+          <ul class="contact__bullets">
+            <li>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#FF3621" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="#FF3621" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Live FMAPI demo in your Databricks workspace
+            </li>
+            <li>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#FF3621" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="#FF3621" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Side-by-side cost comparison vs. your current AI spend
+            </li>
+            <li>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#FF3621" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="#FF3621" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              30-day FMAPI access — free, no commitment
+            </li>
+          </ul>
+        </div>
+        <div class="contact__form-wrap reveal">
+          <form class="contact-form" id="contactForm" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">First Name *</label>
+                <input type="text" id="firstName" name="firstName" placeholder="Ada" autocomplete="given-name" required />
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name *</label>
+                <input type="text" id="lastName" name="lastName" placeholder="Lovelace" autocomplete="family-name" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">Work Email *</label>
+              <input type="email" id="email" name="email" placeholder="ada@company.com" autocomplete="email" required />
+            </div>
+            <div class="form-group">
+              <label for="company">Company *</label>
+              <input type="text" id="company" name="company" placeholder="Acme Corp" autocomplete="organization" required />
+            </div>
+            <div class="form-group">
+              <label for="usecase">What do you want to build with FMAPI?</label>
+              <select id="usecase" name="usecase">
+                <option value="" disabled selected>Select your primary use case</option>
+                <option value="customer-ai">AI Customer Assistant</option>
+                <option value="doc-processing">Document &amp; Process Automation</option>
+                <option value="knowledge">Internal Knowledge Assistant</option>
+                <option value="analytics">Natural Language Analytics</option>
+                <option value="replace">Replace Existing AI Vendor</option>
+                <option value="other">Exploring Options</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="message">Anything we should know before the demo? (optional)</label>
+              <textarea id="message" name="message" rows="3" placeholder="Current AI vendor, Databricks setup, team size, timeline…"></textarea>
+            </div>
+            <button type="submit" class="btn btn--primary btn--full" id="submitBtn">
+              <span class="btn-text">Book My FMAPI Demo</span>
+              <span class="btn-spinner" aria-hidden="true"></span>
+            </button>
+            <p class="form-disclaimer">By submitting you agree to Databricks' <a href="#">Privacy Policy</a>. No spam, ever.</p>
+          </form>
+          <div class="form-success" id="formSuccess" hidden>
+            <div class="form-success__icon">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" stroke="#FF3621" stroke-width="2"/><path d="M14 24l7 7 13-13" stroke="#FF3621" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3>Demo booked!</h3>
+            <p>A Databricks FMAPI specialist will reach out within 1 business day to schedule your personalized session. Check your inbox.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__brand">
+          <a href="#" class="nav__logo">
+            <svg width="20" height="20" viewBox="0 0 20 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="m18.318 9.275-8.631 4.859L.445 8.942 0 9.182v3.77l9.687 5.431 8.63-4.84v1.995l-8.63 4.86-9.242-5.192-.445.24v.646l9.687 5.432 9.668-5.432v-3.769l-.445-.24-9.223 5.173-8.65-4.84V10.42l8.65 4.84 9.668-5.43V6.114l-.482-.277-9.186 5.155L1.482 6.41l8.205-4.6 6.741 3.787.593-.332v-.462L9.687.684 0 6.115v.592l9.687 5.432 8.63-4.86z" fill="#EE3D2C"/>
+            </svg>
+            <span>Databricks</span>
+          </a>
+          <p>Foundation Model APIs<br />© 2026 Databricks, Inc.</p>
+        </div>
+        <nav class="footer__links">
+          <div>
+            <h5>FMAPI</h5>
+            <a href="#">Documentation</a>
+            <a href="#">Pricing</a>
+            <a href="#">Model Catalog</a>
+            <a href="#">Status</a>
+          </div>
+          <div>
+            <h5>Company</h5>
+            <a href="#">About Us</a>
+            <a href="#">Blog</a>
+            <a href="#">Careers</a>
+            <a href="#">Press</a>
+          </div>
+          <div>
+            <h5>Legal</h5>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Security</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
