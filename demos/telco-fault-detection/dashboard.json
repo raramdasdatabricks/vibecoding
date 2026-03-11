@@ -1,0 +1,672 @@
+{
+  "datasets": [
+    {
+      "name": "ds_summary",
+      "displayName": "Summary KPIs",
+      "queryLines": [
+        "SELECT ",
+        "  (SELECT COUNT(DISTINCT element_id) FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.bronze_network_topology) as total_elements, ",
+        "  (SELECT ROUND(AVG(health_score), 1) FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.gold_network_health) as avg_health_score, ",
+        "  (SELECT COUNT(*) FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.bronze_alarms) as total_alarms, ",
+        "  (SELECT COUNT(*) FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.gold_correlated_incidents) as total_incidents, ",
+        "  ROUND((SELECT COUNT(*) FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.bronze_alarms) * 1.0 / NULLIF((SELECT COUNT(*) FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.gold_correlated_incidents), 0), 1) as alarm_reduction_ratio, ",
+        "  (SELECT COUNT(DISTINCT root_cause) FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.bronze_trouble_tickets) as fault_types_detected "
+      ]
+    },
+    {
+      "name": "ds_health_by_region",
+      "displayName": "Health by Region",
+      "queryLines": [
+        "SELECT region, ",
+        "  ROUND(AVG(health_score), 1) as health_score, ",
+        "  SUM(total_alarms) as total_alarms, ",
+        "  SUM(critical_alarms) as critical_alarms ",
+        "FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.gold_network_health ",
+        "GROUP BY region ",
+        "ORDER BY health_score ASC"
+      ]
+    },
+    {
+      "name": "ds_health_trend",
+      "displayName": "Health Trend",
+      "queryLines": [
+        "SELECT DATE_TRUNC('DAY', timestamp) as day, ",
+        "  region, ",
+        "  ROUND(AVG(health_score), 1) as health_score ",
+        "FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.gold_network_health ",
+        "GROUP BY DATE_TRUNC('DAY', timestamp), region ",
+        "ORDER BY day, region"
+      ]
+    },
+    {
+      "name": "ds_alarm_trend",
+      "displayName": "Alarm Trend by Severity",
+      "queryLines": [
+        "SELECT DATE_TRUNC('DAY', alarm_time) as day, ",
+        "  severity, ",
+        "  COUNT(*) as alarm_count ",
+        "FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.bronze_alarms ",
+        "GROUP BY DATE_TRUNC('DAY', alarm_time), severity ",
+        "ORDER BY day, severity"
+      ]
+    },
+    {
+      "name": "ds_top_elements",
+      "displayName": "Top Impacted Elements",
+      "queryLines": [
+        "SELECT t.element_id, t.element_name, t.element_type, t.region, ",
+        "  COUNT(*) as alarm_count, ",
+        "  MAX(a.severity) as max_severity ",
+        "FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.bronze_alarms a ",
+        "JOIN serverless_stable_lyrggh_catalog.telco_network_fault_detection.bronze_network_topology t ON a.element_id = t.element_id ",
+        "GROUP BY t.element_id, t.element_name, t.element_type, t.region ",
+        "ORDER BY alarm_count DESC ",
+        "LIMIT 10"
+      ]
+    },
+    {
+      "name": "ds_correlation",
+      "displayName": "Alarm Correlation Effectiveness",
+      "queryLines": [
+        "SELECT ",
+        "  DATE_TRUNC('DAY', detected_at) as day, ",
+        "  SUM(raw_alarm_count) as raw_alarms, ",
+        "  COUNT(*) as correlated_incidents ",
+        "FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.gold_correlated_incidents ",
+        "GROUP BY DATE_TRUNC('DAY', detected_at) ",
+        "ORDER BY day"
+      ]
+    },
+    {
+      "name": "ds_incidents",
+      "displayName": "Correlated Incidents",
+      "queryLines": [
+        "SELECT incident_id, detected_at, root_cause_element, root_cause_type, ",
+        "  affected_count, raw_alarm_count, max_severity, region, ",
+        "  estimated_customer_impact ",
+        "FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.gold_correlated_incidents ",
+        "ORDER BY raw_alarm_count DESC ",
+        "LIMIT 20"
+      ]
+    },
+    {
+      "name": "ds_tickets",
+      "displayName": "Trouble Tickets MTTR",
+      "queryLines": [
+        "SELECT root_cause, priority, ",
+        "  COUNT(*) as tickets, ",
+        "  ROUND(AVG(mttr_minutes), 0) as reactive_mttr_min, ",
+        "  ROUND(AVG(mttr_minutes) * 0.45, 0) as proactive_mttr_min, ",
+        "  SUM(affected_customers) as customers_impacted ",
+        "FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.bronze_trouble_tickets ",
+        "GROUP BY root_cause, priority ",
+        "ORDER BY priority, tickets DESC"
+      ]
+    },
+    {
+      "name": "ds_fault_types",
+      "displayName": "Fault Type Distribution",
+      "queryLines": [
+        "SELECT root_cause_type as fault_type, ",
+        "  COUNT(*) as incident_count, ",
+        "  SUM(raw_alarm_count) as total_alarms, ",
+        "  SUM(estimated_customer_impact) as customer_impact ",
+        "FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.gold_correlated_incidents ",
+        "WHERE root_cause_type != 'NORMAL_OPERATION' ",
+        "GROUP BY root_cause_type ",
+        "ORDER BY incident_count DESC ",
+        "LIMIT 8"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "overview",
+      "displayName": "Network Health Overview",
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layout": [
+        {
+          "widget": {
+            "name": "title",
+            "multilineTextboxSpec": {
+              "lines": ["## Sri Lanka Telecom — Proactive Network Fault Detection"]
+            }
+          },
+          "position": {"x": 0, "y": 0, "width": 6, "height": 1}
+        },
+        {
+          "widget": {
+            "name": "subtitle",
+            "multilineTextboxSpec": {
+              "lines": ["AI/ML-powered network monitoring across 5 regions | 30-day analysis window (Feb 8 – Mar 10, 2026)"]
+            }
+          },
+          "position": {"x": 0, "y": 1, "width": 6, "height": 1}
+        },
+        {
+          "widget": {
+            "name": "kpi-elements",
+            "queries": [{
+              "name": "main_query",
+              "query": {
+                "datasetName": "ds_summary",
+                "fields": [{"name": "total_elements", "expression": "`total_elements`"}],
+                "disaggregated": true
+              }
+            }],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {"fieldName": "total_elements", "displayName": "Network Elements"}
+              },
+              "frame": {"showTitle": true, "title": "Network Elements Monitored"}
+            }
+          },
+          "position": {"x": 0, "y": 2, "width": 2, "height": 3}
+        },
+        {
+          "widget": {
+            "name": "kpi-health",
+            "queries": [{
+              "name": "main_query",
+              "query": {
+                "datasetName": "ds_summary",
+                "fields": [{"name": "avg_health_score", "expression": "`avg_health_score`"}],
+                "disaggregated": true
+              }
+            }],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {"fieldName": "avg_health_score", "displayName": "Health Score"}
+              },
+              "frame": {"showTitle": true, "title": "Avg Network Health Score"}
+            }
+          },
+          "position": {"x": 2, "y": 2, "width": 2, "height": 3}
+        },
+        {
+          "widget": {
+            "name": "kpi-reduction",
+            "queries": [{
+              "name": "main_query",
+              "query": {
+                "datasetName": "ds_summary",
+                "fields": [{"name": "alarm_reduction_ratio", "expression": "`alarm_reduction_ratio`"}],
+                "disaggregated": true
+              }
+            }],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {"fieldName": "alarm_reduction_ratio", "displayName": "Alarm Reduction Ratio"}
+              },
+              "frame": {"showTitle": true, "title": "Alarm Correlation Ratio (x:1)"}
+            }
+          },
+          "position": {"x": 4, "y": 2, "width": 2, "height": 3}
+        },
+        {
+          "widget": {
+            "name": "section-health",
+            "multilineTextboxSpec": {
+              "lines": ["### Regional Network Health"]
+            }
+          },
+          "position": {"x": 0, "y": 5, "width": 6, "height": 1}
+        },
+        {
+          "widget": {
+            "name": "health-trend-chart",
+            "queries": [{
+              "name": "main_query",
+              "query": {
+                "datasetName": "ds_health_trend",
+                "fields": [
+                  {"name": "day", "expression": "`day`"},
+                  {"name": "health_score", "expression": "`health_score`"},
+                  {"name": "region", "expression": "`region`"}
+                ],
+                "disaggregated": true
+              }
+            }],
+            "spec": {
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {"fieldName": "day", "scale": {"type": "temporal"}, "displayName": "Date"},
+                "y": {"fieldName": "health_score", "scale": {"type": "quantitative"}, "displayName": "Health Score"},
+                "color": {"fieldName": "region", "scale": {"type": "categorical"}, "displayName": "Region"}
+              },
+              "frame": {"showTitle": true, "title": "Network Health Score Trend by Region"}
+            }
+          },
+          "position": {"x": 0, "y": 6, "width": 3, "height": 6}
+        },
+        {
+          "widget": {
+            "name": "health-by-region-bar",
+            "queries": [{
+              "name": "main_query",
+              "query": {
+                "datasetName": "ds_health_by_region",
+                "fields": [
+                  {"name": "region", "expression": "`region`"},
+                  {"name": "health_score", "expression": "`health_score`"},
+                  {"name": "total_alarms", "expression": "`total_alarms`"}
+                ],
+                "disaggregated": true
+              }
+            }],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {"fieldName": "region", "scale": {"type": "categorical"}, "displayName": "Region"},
+                "y": {"fieldName": "health_score", "scale": {"type": "quantitative"}, "displayName": "Health Score"}
+              },
+              "frame": {"showTitle": true, "title": "Average Health Score by Region"}
+            }
+          },
+          "position": {"x": 3, "y": 6, "width": 3, "height": 6}
+        }
+      ]
+    },
+    {
+      "name": "alarms",
+      "displayName": "Alarm Analysis & Correlation",
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layout": [
+        {
+          "widget": {
+            "name": "alarm-title",
+            "multilineTextboxSpec": {
+              "lines": ["## Alarm Analysis & Correlation"]
+            }
+          },
+          "position": {"x": 0, "y": 0, "width": 6, "height": 1}
+        },
+        {
+          "widget": {
+            "name": "alarm-subtitle",
+            "multilineTextboxSpec": {
+              "lines": ["Temporal + topological alarm correlation reduces NOC noise by grouping related alarms into actionable incidents"]
+            }
+          },
+          "position": {"x": 0, "y": 1, "width": 6, "height": 1}
+        },
+        {
+          "widget": {
+            "name": "kpi-raw-alarms",
+            "queries": [{
+              "name": "main_query",
+              "query": {
+                "datasetName": "ds_summary",
+                "fields": [{"name": "total_alarms", "expression": "`total_alarms`"}],
+                "disaggregated": true
+              }
+            }],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {"fieldName": "total_alarms", "displayName": "Raw Alarms"}
+              },
+              "frame": {"showTitle": true, "title": "Total Raw Alarms"}
+            }
+          },
+          "position": {"x": 0, "y": 2, "width": 2, "height": 3}
+        },
+        {
+          "widget": {
+            "name": "kpi-incidents",
+            "queries": [{
+              "name": "main_query",
+              "query": {
+                "datasetName": "ds_summary",
+                "fields": [{"name": "total_incidents", "expression": "`total_incidents`"}],
+                "disaggregated": true
+              }
+            }],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {"fieldName": "total_incidents", "displayName": "Correlated Incidents"}
+              },
+              "frame": {"showTitle": true, "title": "Correlated Incidents"}
+            }
+          },
+          "position": {"x": 2, "y": 2, "width": 2, "height": 3}
+        },
+        {
+          "widget": {
+            "name": "kpi-fault-types",
+            "queries": [{
+              "name": "main_query",
+              "query": {
+                "datasetName": "ds_summary",
+                "fields": [{"name": "fault_types_detected", "expression": "`fault_types_detected`"}],
+                "disaggregated": true
+              }
+            }],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {"fieldName": "fault_types_detected", "displayName": "Fault Types"}
+              },
+              "frame": {"showTitle": true, "title": "Fault Types Detected"}
+            }
+          },
+          "position": {"x": 4, "y": 2, "width": 2, "height": 3}
+        },
+        {
+          "widget": {
+            "name": "alarm-severity-trend",
+            "queries": [{
+              "name": "main_query",
+              "query": {
+                "datasetName": "ds_alarm_trend",
+                "fields": [
+                  {"name": "day", "expression": "`day`"},
+                  {"name": "alarm_count", "expression": "`alarm_count`"},
+                  {"name": "severity", "expression": "`severity`"}
+                ],
+                "disaggregated": true
+              }
+            }],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {"fieldName": "day", "scale": {"type": "temporal"}, "displayName": "Date"},
+                "y": {"fieldName": "alarm_count", "scale": {"type": "quantitative"}, "displayName": "Alarm Count"},
+                "color": {"fieldName": "severity", "scale": {"type": "categorical"}, "displayName": "Severity"}
+              },
+              "frame": {"showTitle": true, "title": "Daily Alarm Volume by Severity"}
+            }
+          },
+          "position": {"x": 0, "y": 5, "width": 3, "height": 6}
+        },
+        {
+          "widget": {
+            "name": "correlation-chart",
+            "queries": [{
+              "name": "main_query",
+              "query": {
+                "datasetName": "ds_correlation",
+                "fields": [
+                  {"name": "day", "expression": "`day`"},
+                  {"name": "raw_alarms", "expression": "`raw_alarms`"},
+                  {"name": "correlated_incidents", "expression": "`correlated_incidents`"}
+                ],
+                "disaggregated": true
+              }
+            }],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {"fieldName": "day", "scale": {"type": "temporal"}, "displayName": "Date"},
+                "y": {
+                  "scale": {"type": "quantitative"},
+                  "fields": [
+                    {"fieldName": "raw_alarms", "displayName": "Raw Alarms"},
+                    {"fieldName": "correlated_incidents", "displayName": "Correlated Incidents"}
+                  ]
+                }
+              },
+              "mark": {"layout": "group"},
+              "frame": {"showTitle": true, "title": "Raw Alarms vs Correlated Incidents (Reduction)"}
+            }
+          },
+          "position": {"x": 3, "y": 5, "width": 3, "height": 6}
+        },
+        {
+          "widget": {
+            "name": "fault-type-pie",
+            "queries": [{
+              "name": "main_query",
+              "query": {
+                "datasetName": "ds_fault_types",
+                "fields": [
+                  {"name": "fault_type", "expression": "`fault_type`"},
+                  {"name": "incident_count", "expression": "`incident_count`"}
+                ],
+                "disaggregated": true
+              }
+            }],
+            "spec": {
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {"fieldName": "incident_count", "scale": {"type": "quantitative"}, "displayName": "Incidents"},
+                "color": {"fieldName": "fault_type", "scale": {"type": "categorical"}, "displayName": "Fault Type"}
+              },
+              "frame": {"showTitle": true, "title": "Incidents by Fault Type"}
+            }
+          },
+          "position": {"x": 0, "y": 11, "width": 3, "height": 6}
+        },
+        {
+          "widget": {
+            "name": "top-elements-bar",
+            "queries": [{
+              "name": "main_query",
+              "query": {
+                "datasetName": "ds_top_elements",
+                "fields": [
+                  {"name": "element_name", "expression": "`element_name`"},
+                  {"name": "alarm_count", "expression": "`alarm_count`"}
+                ],
+                "disaggregated": true
+              }
+            }],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {"fieldName": "element_name", "scale": {"type": "categorical"}, "displayName": "Network Element"},
+                "y": {"fieldName": "alarm_count", "scale": {"type": "quantitative"}, "displayName": "Alarm Count"}
+              },
+              "frame": {"showTitle": true, "title": "Top 10 Most Impacted Network Elements"}
+            }
+          },
+          "position": {"x": 3, "y": 11, "width": 3, "height": 6}
+        }
+      ]
+    },
+    {
+      "name": "incidents",
+      "displayName": "Incidents & MTTR",
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layout": [
+        {
+          "widget": {
+            "name": "incidents-title",
+            "multilineTextboxSpec": {
+              "lines": ["## Correlated Incidents & MTTR Improvement"]
+            }
+          },
+          "position": {"x": 0, "y": 0, "width": 6, "height": 1}
+        },
+        {
+          "widget": {
+            "name": "incidents-subtitle",
+            "multilineTextboxSpec": {
+              "lines": ["Proactive detection enables pre-staged remediation, reducing Mean Time To Repair by ~55%"]
+            }
+          },
+          "position": {"x": 0, "y": 1, "width": 6, "height": 1}
+        },
+        {
+          "widget": {
+            "name": "mttr-comparison",
+            "queries": [{
+              "name": "main_query",
+              "query": {
+                "datasetName": "ds_tickets",
+                "fields": [
+                  {"name": "root_cause", "expression": "`root_cause`"},
+                  {"name": "reactive_mttr_min", "expression": "`reactive_mttr_min`"},
+                  {"name": "proactive_mttr_min", "expression": "`proactive_mttr_min`"}
+                ],
+                "disaggregated": true
+              }
+            }],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {"fieldName": "root_cause", "scale": {"type": "categorical"}, "displayName": "Root Cause"},
+                "y": {
+                  "scale": {"type": "quantitative"},
+                  "fields": [
+                    {"fieldName": "reactive_mttr_min", "displayName": "Reactive MTTR (min)"},
+                    {"fieldName": "proactive_mttr_min", "displayName": "Proactive MTTR (min)"}
+                  ]
+                }
+              },
+              "mark": {"layout": "group"},
+              "frame": {"showTitle": true, "title": "MTTR Comparison: Reactive vs Proactive (minutes)"}
+            }
+          },
+          "position": {"x": 0, "y": 2, "width": 6, "height": 6}
+        },
+        {
+          "widget": {
+            "name": "incidents-section",
+            "multilineTextboxSpec": {
+              "lines": ["### Top Correlated Incidents"]
+            }
+          },
+          "position": {"x": 0, "y": 8, "width": 6, "height": 1}
+        },
+        {
+          "widget": {
+            "name": "incidents-table",
+            "queries": [{
+              "name": "main_query",
+              "query": {
+                "datasetName": "ds_incidents",
+                "fields": [
+                  {"name": "incident_id", "expression": "`incident_id`"},
+                  {"name": "detected_at", "expression": "`detected_at`"},
+                  {"name": "root_cause_element", "expression": "`root_cause_element`"},
+                  {"name": "root_cause_type", "expression": "`root_cause_type`"},
+                  {"name": "raw_alarm_count", "expression": "`raw_alarm_count`"},
+                  {"name": "affected_count", "expression": "`affected_count`"},
+                  {"name": "max_severity", "expression": "`max_severity`"},
+                  {"name": "region", "expression": "`region`"},
+                  {"name": "estimated_customer_impact", "expression": "`estimated_customer_impact`"}
+                ],
+                "disaggregated": true
+              }
+            }],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {"fieldName": "incident_id", "displayName": "Incident"},
+                  {"fieldName": "detected_at", "displayName": "Detected At"},
+                  {"fieldName": "root_cause_element", "displayName": "Root Cause Element"},
+                  {"fieldName": "root_cause_type", "displayName": "Fault Type"},
+                  {"fieldName": "raw_alarm_count", "displayName": "Raw Alarms"},
+                  {"fieldName": "affected_count", "displayName": "Affected Elements"},
+                  {"fieldName": "max_severity", "displayName": "Severity"},
+                  {"fieldName": "region", "displayName": "Region"},
+                  {"fieldName": "estimated_customer_impact", "displayName": "Est. Customer Impact"}
+                ]
+              },
+              "frame": {"showTitle": true, "title": "Correlated Incidents Detail"}
+            }
+          },
+          "position": {"x": 0, "y": 9, "width": 6, "height": 7}
+        },
+        {
+          "widget": {
+            "name": "tickets-section",
+            "multilineTextboxSpec": {
+              "lines": ["### Trouble Tickets — MTTR Analysis"]
+            }
+          },
+          "position": {"x": 0, "y": 16, "width": 6, "height": 1}
+        },
+        {
+          "widget": {
+            "name": "tickets-table",
+            "queries": [{
+              "name": "main_query",
+              "query": {
+                "datasetName": "ds_tickets",
+                "fields": [
+                  {"name": "root_cause", "expression": "`root_cause`"},
+                  {"name": "priority", "expression": "`priority`"},
+                  {"name": "tickets", "expression": "`tickets`"},
+                  {"name": "reactive_mttr_min", "expression": "`reactive_mttr_min`"},
+                  {"name": "proactive_mttr_min", "expression": "`proactive_mttr_min`"},
+                  {"name": "customers_impacted", "expression": "`customers_impacted`"}
+                ],
+                "disaggregated": true
+              }
+            }],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {"fieldName": "root_cause", "displayName": "Root Cause"},
+                  {"fieldName": "priority", "displayName": "Priority"},
+                  {"fieldName": "tickets", "displayName": "Tickets"},
+                  {"fieldName": "reactive_mttr_min", "displayName": "Reactive MTTR (min)"},
+                  {"fieldName": "proactive_mttr_min", "displayName": "Proactive MTTR (min)"},
+                  {"fieldName": "customers_impacted", "displayName": "Customers Impacted"}
+                ]
+              },
+              "frame": {"showTitle": true, "title": "MTTR by Root Cause & Priority"}
+            }
+          },
+          "position": {"x": 0, "y": 17, "width": 6, "height": 6}
+        }
+      ]
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "pageType": "PAGE_TYPE_GLOBAL_FILTERS",
+      "layout": [
+        {
+          "widget": {
+            "name": "filter-region",
+            "queries": [{
+              "name": "ds_health_by_region_region",
+              "query": {
+                "datasetName": "ds_health_by_region",
+                "fields": [{"name": "region", "expression": "`region`"}],
+                "disaggregated": false
+              }
+            }],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [{
+                  "fieldName": "region",
+                  "displayName": "Region",
+                  "queryName": "ds_health_by_region_region"
+                }]
+              },
+              "frame": {"showTitle": true, "title": "Region"}
+            }
+          },
+          "position": {"x": 0, "y": 0, "width": 2, "height": 2}
+        }
+      ]
+    }
+  ]
+}

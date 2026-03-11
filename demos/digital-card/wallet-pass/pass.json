@@ -1,0 +1,64 @@
+{
+  "formatVersion": 1,
+  "passTypeIdentifier": "pass.com.databricks.businesscard",
+  "serialNumber": "rajesh-ramdas-001",
+  "teamIdentifier": "DATABRICKS",
+  "organizationName": "Databricks India",
+  "description": "Rajesh Ramdas - Business Card",
+  "logoText": "Databricks",
+  "foregroundColor": "rgb(255, 255, 255)",
+  "backgroundColor": "rgb(255, 54, 33)",
+  "labelColor": "rgb(255, 220, 210)",
+  "generic": {
+    "primaryFields": [
+      {
+        "key": "name",
+        "label": "NAME",
+        "value": "Rajesh Ramdas"
+      }
+    ],
+    "secondaryFields": [
+      {
+        "key": "title",
+        "label": "TITLE",
+        "value": "Senior Director - Field Engineering"
+      },
+      {
+        "key": "company",
+        "label": "COMPANY",
+        "value": "Databricks India"
+      }
+    ],
+    "auxiliaryFields": [
+      {
+        "key": "phone",
+        "label": "PHONE",
+        "value": "+91 958 226 4238"
+      },
+      {
+        "key": "email",
+        "label": "EMAIL",
+        "value": "rajesh.ramdas@databricks.com"
+      }
+    ],
+    "backFields": [
+      {
+        "key": "contact-info",
+        "label": "Contact Information",
+        "value": "Rajesh Ramdas\nSenior Director - Field Engineering\nDatabricks India\n\nPhone: +91 958 226 4238\nEmail: rajesh.ramdas@databricks.com"
+      }
+    ]
+  },
+  "barcode": {
+    "message": "BEGIN:VCARD\nVERSION:3.0\nN:Ramdas;Rajesh;;;\nFN:Rajesh Ramdas\nORG:Databricks India\nTITLE:Senior Director - Field Engineering\nTEL;TYPE=CELL:+919582264238\nEMAIL;TYPE=WORK:rajesh.ramdas@databricks.com\nEND:VCARD",
+    "format": "PKBarcodeFormatQR",
+    "messageEncoding": "iso-8859-1"
+  },
+  "barcodes": [
+    {
+      "message": "BEGIN:VCARD\nVERSION:3.0\nN:Ramdas;Rajesh;;;\nFN:Rajesh Ramdas\nORG:Databricks India\nTITLE:Senior Director - Field Engineering\nTEL;TYPE=CELL:+919582264238\nEMAIL;TYPE=WORK:rajesh.ramdas@databricks.com\nEND:VCARD",
+      "format": "PKBarcodeFormatQR",
+      "messageEncoding": "iso-8859-1"
+    }
+  ]
+}
