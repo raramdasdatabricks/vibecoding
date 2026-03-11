@@ -3,14 +3,14 @@
 
 **Duration:** 45-60 minutes
 **Audience:** SLT Network Operations, CTO Office, Digital Transformation Team
-**Presenter:** Rajesh Ramdas, Senior Director - Field Engineering, Databricks India
+**Presenter:** [Your Name], Databricks
 
 ---
 
 ## Pre-Demo Setup (10 min before)
 
 1. Open these tabs in your browser:
-   - **Dashboard**: https://fevm-serverless-stable-lyrggh.cloud.databricks.com/sql/dashboardsv3/01f11c8616b01176acad76ee9e511869
+   - **Dashboard**: Navigate to `Dashboards` → "Sri Lanka Telecom - Network Fault Detection"
    - **Notebook 01** (Data Generation): `/telco_network_fault_detection/01_data_generation`
    - **Notebook 03** (Anomaly Detection): `/telco_network_fault_detection/03_anomaly_detection`
    - **Notebook 04** (Alarm Correlation): `/telco_network_fault_detection/04_alarm_correlation`
@@ -267,10 +267,10 @@ AI/BI Dashboard → NOC Integration → Auto-Ticketing
 
 | Resource | Location |
 |----------|----------|
-| Workspace | https://fevm-serverless-stable-lyrggh.cloud.databricks.com |
-| Catalog | `serverless_stable_lyrggh_catalog` |
+| Workspace | Your Databricks workspace URL |
+| Catalog | Update `YOUR_CATALOG` in each notebook to your catalog name |
 | Schema | `telco_network_fault_detection` |
-| Notebooks | `/Users/rajesh.ramdas@databricks.com/telco_network_fault_detection/` |
-| Dashboard | Dashboard tab → "Sri Lanka Telecom - Network Fault Detection" |
+| Notebooks | `/Users/<your-email>/telco_network_fault_detection/` |
+| Dashboard | Dashboards → "Sri Lanka Telecom - Network Fault Detection" |
 | MLflow | Experiments → `telco_fault_detection_experiment` |
-| Warehouse | Serverless Starter Warehouse (auto-starts) |
+| Warehouse | Any serverless SQL warehouse |

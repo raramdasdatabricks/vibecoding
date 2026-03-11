@@ -5,7 +5,7 @@
 # MAGIC
 # MAGIC **Duration:** 45-60 minutes
 # MAGIC **Audience:** SLT Network Operations, CTO Office, Digital Transformation Team
-# MAGIC **Presenter:** Rajesh Ramdas, Senior Director - Field Engineering, Databricks India
+# MAGIC **Presenter:** [Your Name], Databricks
 
 # COMMAND ----------
 
@@ -116,7 +116,7 @@
 
 # COMMAND ----------
 
-CATALOG = "serverless_stable_lyrggh_catalog"
+CATALOG = "YOUR_CATALOG"
 SCHEMA = "telco_network_fault_detection"
 spark.sql(f"USE CATALOG {CATALOG}")
 spark.sql(f"USE SCHEMA {SCHEMA}")
@@ -343,7 +343,7 @@ ORDER BY severity
 # MAGIC | Resource | Location |
 # MAGIC |----------|----------|
 # MAGIC | Workspace | This workspace |
-# MAGIC | Catalog | `serverless_stable_lyrggh_catalog` |
+# MAGIC | Catalog | `YOUR_CATALOG` |
 # MAGIC | Schema | `telco_network_fault_detection` |
 # MAGIC | Notebooks | `telco_network_fault_detection/` (00 through 04) |
 # MAGIC | Dashboard | Dashboards → "Sri Lanka Telecom - Network Fault Detection" |

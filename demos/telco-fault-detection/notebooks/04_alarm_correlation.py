@@ -15,7 +15,7 @@
 
 # COMMAND ----------
 
-CATALOG = "serverless_stable_lyrggh_catalog"
+CATALOG = "YOUR_CATALOG"
 SCHEMA = "telco_network_fault_detection"
 spark.sql(f"USE CATALOG {CATALOG}")
 spark.sql(f"USE SCHEMA {SCHEMA}")

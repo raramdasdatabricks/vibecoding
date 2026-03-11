@@ -18,7 +18,7 @@
 
 # COMMAND ----------
 
-CATALOG = "serverless_stable_lyrggh_catalog"
+CATALOG = "YOUR_CATALOG"
 SCHEMA = "telco_network_fault_detection"
 spark.sql(f"USE CATALOG {CATALOG}")
 spark.sql(f"USE SCHEMA {SCHEMA}")
@@ -31,7 +31,8 @@ import numpy as np
 import pandas as pd
 from pyspark.sql import functions as F
 
-mlflow.set_experiment(f"/Users/rajesh.ramdas@databricks.com/telco_fault_detection_experiment")
+# Set experiment path — update to your username
+mlflow.set_experiment(f"/Users/{spark.sql('SELECT current_user()').first()[0]}/telco_fault_detection_experiment")
 
 # COMMAND ----------
 

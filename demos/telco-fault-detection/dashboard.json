@@ -5,12 +5,12 @@
       "displayName": "Summary KPIs",
       "queryLines": [
         "SELECT ",
-        "  (SELECT COUNT(DISTINCT element_id) FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.bronze_network_topology) as total_elements, ",
-        "  (SELECT ROUND(AVG(health_score), 1) FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.gold_network_health) as avg_health_score, ",
-        "  (SELECT COUNT(*) FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.bronze_alarms) as total_alarms, ",
-        "  (SELECT COUNT(*) FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.gold_correlated_incidents) as total_incidents, ",
-        "  ROUND((SELECT COUNT(*) FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.bronze_alarms) * 1.0 / NULLIF((SELECT COUNT(*) FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.gold_correlated_incidents), 0), 1) as alarm_reduction_ratio, ",
-        "  (SELECT COUNT(DISTINCT root_cause) FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.bronze_trouble_tickets) as fault_types_detected "
+        "  (SELECT COUNT(DISTINCT element_id) FROM YOUR_CATALOG.telco_network_fault_detection.bronze_network_topology) as total_elements, ",
+        "  (SELECT ROUND(AVG(health_score), 1) FROM YOUR_CATALOG.telco_network_fault_detection.gold_network_health) as avg_health_score, ",
+        "  (SELECT COUNT(*) FROM YOUR_CATALOG.telco_network_fault_detection.bronze_alarms) as total_alarms, ",
+        "  (SELECT COUNT(*) FROM YOUR_CATALOG.telco_network_fault_detection.gold_correlated_incidents) as total_incidents, ",
+        "  ROUND((SELECT COUNT(*) FROM YOUR_CATALOG.telco_network_fault_detection.bronze_alarms) * 1.0 / NULLIF((SELECT COUNT(*) FROM YOUR_CATALOG.telco_network_fault_detection.gold_correlated_incidents), 0), 1) as alarm_reduction_ratio, ",
+        "  (SELECT COUNT(DISTINCT root_cause) FROM YOUR_CATALOG.telco_network_fault_detection.bronze_trouble_tickets) as fault_types_detected "
       ]
     },
     {
@@ -21,7 +21,7 @@
         "  ROUND(AVG(health_score), 1) as health_score, ",
         "  SUM(total_alarms) as total_alarms, ",
         "  SUM(critical_alarms) as critical_alarms ",
-        "FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.gold_network_health ",
+        "FROM YOUR_CATALOG.telco_network_fault_detection.gold_network_health ",
         "GROUP BY region ",
         "ORDER BY health_score ASC"
       ]
@@ -33,7 +33,7 @@
         "SELECT DATE_TRUNC('DAY', timestamp) as day, ",
         "  region, ",
         "  ROUND(AVG(health_score), 1) as health_score ",
-        "FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.gold_network_health ",
+        "FROM YOUR_CATALOG.telco_network_fault_detection.gold_network_health ",
         "GROUP BY DATE_TRUNC('DAY', timestamp), region ",
         "ORDER BY day, region"
       ]
@@ -45,7 +45,7 @@
         "SELECT DATE_TRUNC('DAY', alarm_time) as day, ",
         "  severity, ",
         "  COUNT(*) as alarm_count ",
-        "FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.bronze_alarms ",
+        "FROM YOUR_CATALOG.telco_network_fault_detection.bronze_alarms ",
         "GROUP BY DATE_TRUNC('DAY', alarm_time), severity ",
         "ORDER BY day, severity"
       ]
@@ -57,8 +57,8 @@
         "SELECT t.element_id, t.element_name, t.element_type, t.region, ",
         "  COUNT(*) as alarm_count, ",
         "  MAX(a.severity) as max_severity ",
-        "FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.bronze_alarms a ",
-        "JOIN serverless_stable_lyrggh_catalog.telco_network_fault_detection.bronze_network_topology t ON a.element_id = t.element_id ",
+        "FROM YOUR_CATALOG.telco_network_fault_detection.bronze_alarms a ",
+        "JOIN YOUR_CATALOG.telco_network_fault_detection.bronze_network_topology t ON a.element_id = t.element_id ",
         "GROUP BY t.element_id, t.element_name, t.element_type, t.region ",
         "ORDER BY alarm_count DESC ",
         "LIMIT 10"
@@ -72,7 +72,7 @@
         "  DATE_TRUNC('DAY', detected_at) as day, ",
         "  SUM(raw_alarm_count) as raw_alarms, ",
         "  COUNT(*) as correlated_incidents ",
-        "FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.gold_correlated_incidents ",
+        "FROM YOUR_CATALOG.telco_network_fault_detection.gold_correlated_incidents ",
         "GROUP BY DATE_TRUNC('DAY', detected_at) ",
         "ORDER BY day"
       ]
@@ -84,7 +84,7 @@
         "SELECT incident_id, detected_at, root_cause_element, root_cause_type, ",
         "  affected_count, raw_alarm_count, max_severity, region, ",
         "  estimated_customer_impact ",
-        "FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.gold_correlated_incidents ",
+        "FROM YOUR_CATALOG.telco_network_fault_detection.gold_correlated_incidents ",
         "ORDER BY raw_alarm_count DESC ",
         "LIMIT 20"
       ]
@@ -98,7 +98,7 @@
         "  ROUND(AVG(mttr_minutes), 0) as reactive_mttr_min, ",
         "  ROUND(AVG(mttr_minutes) * 0.45, 0) as proactive_mttr_min, ",
         "  SUM(affected_customers) as customers_impacted ",
-        "FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.bronze_trouble_tickets ",
+        "FROM YOUR_CATALOG.telco_network_fault_detection.bronze_trouble_tickets ",
         "GROUP BY root_cause, priority ",
         "ORDER BY priority, tickets DESC"
       ]
@@ -111,7 +111,7 @@
         "  COUNT(*) as incident_count, ",
         "  SUM(raw_alarm_count) as total_alarms, ",
         "  SUM(estimated_customer_impact) as customer_impact ",
-        "FROM serverless_stable_lyrggh_catalog.telco_network_fault_detection.gold_correlated_incidents ",
+        "FROM YOUR_CATALOG.telco_network_fault_detection.gold_correlated_incidents ",
         "WHERE root_cause_type != 'NORMAL_OPERATION' ",
         "GROUP BY root_cause_type ",
         "ORDER BY incident_count DESC ",
